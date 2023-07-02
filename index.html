@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            h1.title{
+                background-color: cornflowerblue;
+                color: beige;
+                padding: 10px;
+            }
+
+            form{
+                margin: 10px;
+                padding: 10px;
+                border: 1px solid #333;
+                border-radius: 20px;
+                display: flex;
+
+            }
+
+            form input{
+                padding: 5px;
+                border: none;
+                outline: none;
+                flex: 1;
+
+            }
+            form button{
+                padding: 5px 10px;
+                background-color: cornflowerblue;
+                color: white;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+            }
+
+            form button:hover{
+                background-color: darkblue;
+            }
+
+            .lista{
+                margin-top: 10px;
+                padding: 5px;
+                display: flex;
+                flex-wrap: wrap;
+                
+            }
+
+            .item{
+                text-align: center;
+                padding: 10px;
+                width: 200px;
+                border: 2px solid cornflowerblue;
+                border-radius: 5px;
+                margin: 5px;
+            }
+            .item:hover{
+                background-color: cornflowerblue;
+                cursor: pointer;
+            }
+            .item img{
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 class="title">Filmes</h1>
+        <form>
+            <input name="pesquisa" placeholder="Digite o nome do filme aqui">
+            <button>Pesquisar</button>
+        </form>
+
+        <div class="lista">
+            <div class="item">
+                <img src="https://m.media-amazon.com/images/M/MV5BOTY4YjI2N2MtYmFlMC00ZjcyLTg3YjEtMDQyM2ZjYzQ5YWFkXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg">
+                <h2>Batman Begins</h2>
+            </div>
+
+            <div class="item">
+                <img src="https://m.media-amazon.com/images/M/MV5BYThjYzcyYzItNTVjNy00NDk0LTgwMWQtYjMwNmNlNWJhMzMyXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg">
+                <h2>Batman vs Superman</h2>
+            </div>
+            
+        </div>
+
+        <script>
+            const apikey = '8fa8be48';
+            const frmPesquisa = document.querySelector("form");
+
+            frmPesquisa.onsubmit = (ev) => {
+                ev.preventDefault();
+                
+                const pesquisa = ev.target.pesquisa.value;
+                if (pesquisa == ""){
+                    alert('Preencha o campo');
+                    return;
+                }
+
+                fetch(`https://omdbapi.com/?s=${pesquisa}&apikey=${apikey}`)
+                    .then(result => result.json())
+                    .then(json => carregaLista(json));
+
+                 
+            }
+
+            const carregaLista = (json) => {
+                const lista = document.querySelector("div.lista");
+                lista.innerHTML = "";
+
+                json.Search.forEach(element => {
+                    
+
+                    let item = document.createElement("div");
+                    item.classList.add("item");
+
+                    item.innerHTML = `<img src="${element.Poster}" /><h2>${element.Title}</h2>`
+
+                    lista.appendChild(item);
+                });
+            }
+        </script>
+    </body>
+</html>
